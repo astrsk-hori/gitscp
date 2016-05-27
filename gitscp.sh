@@ -9,8 +9,8 @@ function transfer() {
     echo "転送処理開始"
     while read line
     do
-        echo "scp -P 10022 -i $SSH_KEY_PATH ./$line ${USER}@${SERVER}:${TARGET_DIR}$line"
-        scp -P 10022 -i $SSH_KEY_PATH ./$line ${USER}@${SERVER}:${TARGET_DIR}$line
+        echo "scp -r -P 10022 -i $SSH_KEY_PATH ./$line ${USER}@${SERVER}:${TARGET_DIR}$line"
+        scp -r -P 10022 -i $SSH_KEY_PATH ./$line ${USER}@${SERVER}:${TARGET_DIR}$line
     done < ./tmp_gitssh_list
 }
 
@@ -37,7 +37,7 @@ yes_or_no_recursive(){
 
 function main(){
 
-    git status -s |awk '{print $2}'|grep -v tmp_gitssh_list>./tmp_gitssh_list
+    git status -su |awk '{print $2}'|grep -v tmp_gitssh_list >./tmp_gitssh_list
     echo "現在の変更ファイル一覧です。"
     echo
     echo "##############################"
