@@ -9,6 +9,10 @@ function transfer() {
     echo "転送処理開始"
     while read line
     do
+        if test "`echo $line|tr -d " "`" = ""; then
+            echo "空行なのでSKIP！"
+            continue
+        fi
         echo "scp -r -P 10022 -i $SSH_KEY_PATH ./$line ${USER}@${SERVER}:${TARGET_DIR}$line"
         scp -r -P 10022 -i $SSH_KEY_PATH ./$line ${USER}@${SERVER}:${TARGET_DIR}$line
     done < ./tmp_gitssh_list
