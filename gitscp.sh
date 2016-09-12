@@ -7,15 +7,14 @@ SERVER=127.0.0.1
 
 function transfer() {
     echo "転送処理開始"
-    while read line
-    do
-        if test "`echo $line|tr -d " "`" = ""; then
-            echo "空行なのでSKIP！"
-            continue
-        fi
-        echo "scp -r -P 10022 -i $SSH_KEY_PATH ./$line ${USER}@${SERVER}:${TARGET_DIR}$line"
-        scp -r -P 10022 -i $SSH_KEY_PATH ./$line ${USER}@${SERVER}:${TARGET_DIR}$line
-    done < ./tmp_gitssh_list
+    if test "`echo ./tmp_gitssh_list|tr -d "\n"|tr -d " "`" = ""; then
+        echo "空行なので終了！"
+        exit
+    fi
+    #echo "scp -r -P 10022 -i $SSH_KEY_PATH ./$line ${USER}@${SERVER}:${TARGET_DIR}$line"
+    #tar zcf - * | ssh yu@172.16.56.168 tar zxf - -C /home/yu/test
+    echo "tar czvf - `cat ./tmp_gitssh_list|awk '{print $2}'`|ssh -P 10022 -i $SSH_KEY_PATH ${USER}@${SERVER} tar xzvf - -C ${TARGET_DIR} "
+    tar czvf - `cat ./tmp_gitssh_list|awk '{print $2}'`|ssh -p 10022 -i $SSH_KEY_PATH ${USER}@${SERVER} tar xzvf - -C ${TARGET_DIR}
 }
 
 yes_or_no_recursive(){
@@ -41,8 +40,10 @@ yes_or_no_recursive(){
 
 function main(){
 
-    git status -su |awk '{print $2}'|grep -v tmp_gitssh_list >./tmp_gitssh_list
+    #git status -su |awk '{print $2}'|grep -v tmp_gitssh_list >./tmp_gitssh_list
+    git status -su |grep -v tmp_gitssh_list >./tmp_gitssh_list
     echo "現在の変更ファイル一覧です。"
+    echo "また現在のバージョンでは削除には対応していません。"
     echo
     echo "##############################"
     cat ./tmp_gitssh_list
@@ -52,8 +53,12 @@ function main(){
     read
     vi ./tmp_gitssh_list
 
-    echo "以下のファイルを転送します。"
+    # ここで削除ファイルの除外を行う。
+    cat ./tmp_gitssh_list|grep -v "^ D" >./tmp_gitssh_list
+
+    echo "以下のファイルを転送します(削除は除外してあります)。"
     cat ./tmp_gitssh_list
+
 
     yes_or_no_recursive "転送を実行してもよろしいですか？"
 
