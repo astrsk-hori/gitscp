@@ -1,9 +1,21 @@
 #!/bin/bash
+SHELL_DIR=$(cd "$(dirname "$0")"; pwd)
 
-TARGET_DIR=/var/emtg/dev13-aop.admin.emtg.jp/
-SSH_KEY_PATH=/cygdrive/c/Users/go.horie/aopadmin_ssh
-USER=aopadmin
-SERVER=127.0.0.1
+CONF_CHECK="FALSE"
+
+## START customize area
+if test "`pwd`" = "/home/go.horie/work/aop-admin"; then
+    echo "this AOP dhirectory ."
+    CONF_CHECK="TRUE"
+    . ${SHELL_DIR}/conf/aop.conf
+fi
+
+if test "`pwd`" = "/home/go.horie/work/baystars"; then
+    echo "this baystars directory ."
+    CONF_CHECK="TRUE"
+    . ${SHELL_DIR}/conf/baystars.conf
+fi
+## END
 
 function transfer() {
     echo "転送処理開始"
@@ -11,10 +23,23 @@ function transfer() {
         echo "空行なので終了！"
         exit
     fi
-    #echo "scp -r -P 10022 -i $SSH_KEY_PATH ./$line ${USER}@${SERVER}:${TARGET_DIR}$line"
-    #tar zcf - * | ssh yu@172.16.56.168 tar zxf - -C /home/yu/test
-    echo "tar czvf - `cat ./tmp_gitssh_list|awk '{print $2}'`|ssh -P 10022 -i $SSH_KEY_PATH ${USER}@${SERVER} tar xzvf - -C ${TARGET_DIR} "
-    tar czvf - `cat ./tmp_gitssh_list|awk '{print $2}'`|ssh -p 10022 -i $SSH_KEY_PATH ${USER}@${SERVER} tar xzvf - -C ${TARGET_DIR}
+
+    if test $USE_SSH_KEY = "TRUE"; then
+        ssh_private_key_transfer
+    else
+        ssh_transfer
+    fi
+}
+
+function ssh_transfer() {
+    echo "password: ${PASSWORD}"
+    echo "tar czvf - `cat ./tmp_gitssh_list|awk '{print $2}'`|ssh -p ${PORT} ${USER}@${SERVER} tar xzvf - -C ${TARGET_DIR} "
+    tar czvf - `cat ./tmp_gitssh_list|awk '{print $2}'`|ssh -p ${PORT} ${USER}@${SERVER} tar xzvf - -C ${TARGET_DIR}
+}
+
+function ssh_private_key_transfer() {
+    echo "tar czvf - `cat ./tmp_gitssh_list|awk '{print $2}'`|ssh -p ${PORT} -i $SSH_KEY_PATH ${USER}@${SERVER} tar xzvf - -C ${TARGET_DIR} "
+    tar czvf - `cat ./tmp_gitssh_list|awk '{print $2}'`|ssh -p ${PORT} -i $SSH_KEY_PATH ${USER}@${SERVER} tar xzvf - -C ${TARGET_DIR}
 }
 
 yes_or_no_recursive(){
@@ -39,6 +64,10 @@ yes_or_no_recursive(){
 }
 
 function main(){
+    if test $CONF_CHECK = "FALSE"; then
+        echo "設定ファイルが見つからないので実行できません。"
+        exit;
+    fi
 
     #git status -su |awk '{print $2}'|grep -v tmp_gitssh_list >./tmp_gitssh_list
     git status -su |grep -v tmp_gitssh_list >./tmp_gitssh_list
