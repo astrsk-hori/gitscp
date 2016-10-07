@@ -15,7 +15,7 @@ if test "`pwd`" = "/home/go.horie/work/baystars"; then
     CONF_CHECK="TRUE"
     . ${SHELL_DIR}/conf/baystars.conf
 fi
-## END
+## END customize area
 
 function transfer() {
     echo "転送処理開始"
