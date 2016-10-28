@@ -15,6 +15,12 @@ if test "`pwd`" = "/home/go.horie/work/baystars"; then
     CONF_CHECK="TRUE"
     . ${SHELL_DIR}/conf/baystars.conf
 fi
+
+if test "`pwd`" = "/home/go.horie/work/sns"; then
+    echo "this sns directory ."
+    CONF_CHECK="TRUE"
+    . ${SHELL_DIR}/conf/sns.conf
+fi
 ## END customize area
 
 function transfer() {
@@ -38,6 +44,7 @@ function ssh_transfer() {
 }
 
 function ssh_private_key_transfer() {
+    echo "password: ${PASSWORD}"
     echo "tar czvf - `cat ./tmp_gitssh_list|awk '{print $2}'`|ssh -p ${PORT} -i $SSH_KEY_PATH ${USER}@${SERVER} tar xzvf - -C ${TARGET_DIR} "
     tar czvf - `cat ./tmp_gitssh_list|awk '{print $2}'`|ssh -p ${PORT} -i $SSH_KEY_PATH ${USER}@${SERVER} tar xzvf - -C ${TARGET_DIR}
 }
@@ -68,6 +75,9 @@ function main(){
         echo "設定ファイルが見つからないので実行できません。"
         exit;
     fi
+
+    echo "server: ${SERVER}"
+    echo "dir: ${TARGET_DIR}"
 
     #git status -su |awk '{print $2}'|grep -v tmp_gitssh_list >./tmp_gitssh_list
     git status -su |grep -v tmp_gitssh_list >./tmp_gitssh_list
