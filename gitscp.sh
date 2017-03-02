@@ -21,6 +21,18 @@ if test "`pwd`" = "/home/go.horie/work/sns"; then
     CONF_CHECK="TRUE"
     . ${SHELL_DIR}/conf/sns.conf
 fi
+
+if test "`pwd`" = "/home/go.horie/work/jpbl"; then
+    echo "this jpbl directory ."
+    CONF_CHECK="TRUE"
+    . ${SHELL_DIR}/conf/jpbl.conf
+fi
+
+if test "`pwd`" = "/home/go.horie/work/collection"; then
+    echo "this collection directory ."
+    CONF_CHECK="TRUE"
+    . ${SHELL_DIR}/conf/collection.conf
+fi
 ## END customize area
 
 function transfer() {
@@ -91,6 +103,7 @@ function main(){
     echo "転送するファイルを絞り込む場合はリストから削除してください。"
     read
     vi ./tmp_gitssh_list
+    sleep 1
 
     # ここで削除ファイルの除外を行う。
     cat ./tmp_gitssh_list|grep -v "^ D" >./tmp_gitssh_list
