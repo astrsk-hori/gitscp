@@ -102,11 +102,11 @@ function main(){
     echo
     echo "転送するファイルを絞り込む場合はリストから削除してください。"
     read
-    vi ./tmp_gitssh_list
-    sleep 1
+    vim ./tmp_gitssh_list
 
     # ここで削除ファイルの除外を行う。
-    cat ./tmp_gitssh_list|grep -v "^ D" >./tmp_gitssh_list
+    cat ./tmp_gitssh_list|grep -v '^ D' >./tmp_gitssh_list
+    cat ./tmp_gitssh_list
 
     echo "以下のファイルを転送します(削除は除外してあります)。"
     cat ./tmp_gitssh_list
