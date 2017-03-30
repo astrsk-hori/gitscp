@@ -4,34 +4,11 @@ SHELL_DIR=$(cd "$(dirname "$0")"; pwd)
 CONF_CHECK="FALSE"
 
 ## START customize area
-if test "`pwd`" = "/home/go.horie/work/aop-admin"; then
-    echo "this AOP dhirectory ."
-    CONF_CHECK="TRUE"
-    . ${SHELL_DIR}/conf/aop.conf
-fi
 
-if test "`pwd`" = "/home/go.horie/work/baystars"; then
-    echo "this baystars directory ."
+if test "`pwd`" = "/home/hoge"; then
+    echo "this hoge directory ."
     CONF_CHECK="TRUE"
-    . ${SHELL_DIR}/conf/baystars.conf
-fi
-
-if test "`pwd`" = "/home/go.horie/work/sns"; then
-    echo "this sns directory ."
-    CONF_CHECK="TRUE"
-    . ${SHELL_DIR}/conf/sns.conf
-fi
-
-if test "`pwd`" = "/home/go.horie/work/jpbl"; then
-    echo "this jpbl directory ."
-    CONF_CHECK="TRUE"
-    . ${SHELL_DIR}/conf/jpbl.conf
-fi
-
-if test "`pwd`" = "/home/go.horie/work/collection"; then
-    echo "this collection directory ."
-    CONF_CHECK="TRUE"
-    . ${SHELL_DIR}/conf/collection.conf
+    . ${SHELL_DIR}/conf/hoge.conf
 fi
 ## END customize area
 
