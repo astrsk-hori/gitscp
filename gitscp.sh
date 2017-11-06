@@ -82,10 +82,11 @@ function main(){
     vim ./tmp_gitssh_list
 
     # ここで削除ファイルの除外を行う。
-    cat ./tmp_gitssh_list|grep -v '^ D' >./tmp_gitssh_list
     cat ./tmp_gitssh_list
+    cat ./tmp_gitssh_list|grep -v '^ D' >./tmp_gitssh_list2
 
     echo "以下のファイルを転送します(削除は除外してあります)。"
+    cat ./tmp_gitssh_list2 >./tmp_gitssh_list
     cat ./tmp_gitssh_list
 
 
@@ -94,6 +95,7 @@ function main(){
     # 転送しない場合は終了。
     if test $? -eq 1; then
         rm ./tmp_gitssh_list
+        rm ./tmp_gitssh_list2
         echo "処理を中止しました。"
         exit;
     fi
@@ -101,6 +103,7 @@ function main(){
     transfer
 
     rm ./tmp_gitssh_list
+    rm ./tmp_gitssh_list2
     echo "done!"
 }
 
