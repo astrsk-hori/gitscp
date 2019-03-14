@@ -4,12 +4,7 @@ SHELL_DIR=$(cd "$(dirname "$0")"; pwd)
 CONF_CHECK="FALSE"
 
 ## START customize area
-
-if test "`pwd`" = "/home/hoge"; then
-    echo "this hoge directory ."
-    CONF_CHECK="TRUE"
-    . ${SHELL_DIR}/conf/hoge.conf
-fi
+. ${SHELL_DIR}/dir_setting.conf
 ## END customize area
 
 function transfer() {
@@ -82,7 +77,7 @@ function main(){
     vim ./tmp_gitssh_list
 
     # ここで削除ファイルの除外を行う。
-    cat ./tmp_gitssh_list
+    #cat ./tmp_gitssh_list
     cat ./tmp_gitssh_list|grep -v '^ D' >./tmp_gitssh_list2
 
     echo "以下のファイルを転送します(削除は除外してあります)。"
@@ -105,6 +100,7 @@ function main(){
     rm ./tmp_gitssh_list
     rm ./tmp_gitssh_list2
     echo "done!"
+    date
 }
 
 
