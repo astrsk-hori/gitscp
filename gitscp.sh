@@ -56,8 +56,7 @@ function yes_or_no_recursive(){
                 ;;
             *)
                 echo -e "cannot understand $answer.\n"
-                #yes_or_no_recursive
-                return 1
+                yes_or_no_recursive
                 ;;
         esac
 }
